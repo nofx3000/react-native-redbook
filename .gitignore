@@ -39,6 +39,7 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
+redbookserver/node_modules/
 
 # fastlane
 #
