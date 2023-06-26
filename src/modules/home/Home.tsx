@@ -10,9 +10,9 @@ import {
 import {useLocalStore} from 'mobx-react';
 import HomeStore from './HomeStore';
 import {observer} from 'mobx-react';
-
-import icon_heart from '../../assets/icon_heart.png';
-import icon_heart_empty from '../../assets/icon_heart_empty.png';
+import FlowList from '../../components/flowlist/FlowList';
+import ResizeImage from '../../components/ResizeImage/ResizeImage';
+import Heart from '../../components/Heart/Heart';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -25,28 +25,58 @@ export default observer(() => {
   const renderItem = ({item, index}: {item: ArticleSimple; index: number}) => {
     return (
       <View style={styles.item}>
-        <Image source={{uri: item.image}} style={styles.itemImage} />
+        <ResizeImage
+          source={{uri: item.image}}
+          width={(SCREEN_WIDTH - 18) / 2}
+        />
         <Text style={styles.titleTxt}>{item.title}</Text>
         <View style={styles.nameLayout}>
           <Image source={{uri: item.avatarUrl}} style={styles.avatarImg} />
           <Text style={styles.nameTxt}>{item.userName}</Text>
-          <Image source={icon_heart_empty} style={styles.heart} />
+          <Heart
+            value={item.isFavorite}
+            onValueChanged={(value: boolean) => {
+              console.log(value);
+            }}
+          />
           <Text style={styles.countTxt}>{item.favoriteCount}</Text>
         </View>
       </View>
     );
   };
 
+  const refreshNewData = () => {
+    store.resetPage();
+    store.requestHomeList();
+  };
+
+  const loadMoreData = () => {
+    store.requestHomeList();
+  };
+
+  const Footer = () => {
+    return <Text style={styles.footerTxt}>没有更多数据</Text>;
+  };
+
   return (
     <View style={styles.root}>
-      <FlatList
+      <FlowList
         style={styles.flatList}
         data={store.homeList}
         renderItem={renderItem}
         contentContainerStyle={styles.container}
-        numColumns={2}>
+        numColumns={2}
+        refreshing={store.refreshing}
+        onRefresh={() => {
+          refreshNewData();
+        }}
+        onEndReachedThreshold={0.1}
+        onEndReached={() => {
+          loadMoreData();
+        }}
+        ListFooterComponent={Footer}>
         首页
-      </FlatList>
+      </FlowList>
     </View>
   );
 });
@@ -112,5 +142,13 @@ const styles = StyleSheet.create({
   countTxt: {
     fontSize: 14,
     marginLeft: 4,
+  },
+  footerTxt: {
+    width: '100%',
+    fontSize: 12,
+    color: '#999',
+    marginVertical: 12,
+    textAlign: 'center',
+    textAlignVertical: 'center',
   },
 });
