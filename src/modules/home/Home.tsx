@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import {
-  FlatList,
   View,
   Text,
   StyleSheet,
   Dimensions,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import {useLocalStore} from 'mobx-react';
 import HomeStore from './HomeStore';
@@ -13,6 +13,8 @@ import {observer} from 'mobx-react';
 import FlowList from '../../components/flowlist/FlowList';
 import ResizeImage from '../../components/ResizeImage/ResizeImage';
 import Heart from '../../components/Heart/Heart';
+import TitleBar from './components/TitleBar';
+import CategoryList from './components/CategoryList';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -20,11 +22,25 @@ export default observer(() => {
   const store = useLocalStore(() => new HomeStore());
   useEffect(() => {
     store.requestHomeList();
+    store.getCategoryList();
   }, []);
+
+  const refreshNewData = () => {
+    store.resetPage();
+    store.requestHomeList();
+  };
+
+  const loadMoreData = () => {
+    store.requestHomeList();
+  };
 
   const renderItem = ({item, index}: {item: ArticleSimple; index: number}) => {
     return (
-      <View style={styles.item}>
+      <TouchableOpacity
+        style={styles.item}
+        onPress={() => {
+          console.log('pressed');
+        }}>
         <ResizeImage
           source={{uri: item.image}}
           width={(SCREEN_WIDTH - 18) / 2}
@@ -41,25 +57,23 @@ export default observer(() => {
           />
           <Text style={styles.countTxt}>{item.favoriteCount}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
-  };
-
-  const refreshNewData = () => {
-    store.resetPage();
-    store.requestHomeList();
-  };
-
-  const loadMoreData = () => {
-    store.requestHomeList();
   };
 
   const Footer = () => {
     return <Text style={styles.footerTxt}>没有更多数据</Text>;
   };
 
+  const categoryList = store.categoryList.filter(i => i.isAdd);
   return (
     <View style={styles.root}>
+      <TitleBar
+        tab={1}
+        onTabChanged={(tab: number) => {
+          console.log(`tab=${tab}`);
+        }}
+      />
       <FlowList
         style={styles.flatList}
         data={store.homeList}
@@ -74,7 +88,16 @@ export default observer(() => {
         onEndReached={() => {
           loadMoreData();
         }}
-        ListFooterComponent={Footer}>
+        ListFooterComponent={Footer}
+        ListHeaderComponent={
+          <CategoryList
+            categoryList={categoryList}
+            allCategoryList={store.categoryList}
+            onCategoryChange={(category: Category) => {
+              console.log(JSON.stringify(category));
+            }}
+          />
+        }>
         首页
       </FlowList>
     </View>
@@ -94,7 +117,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   container: {
-    paddingTop: 6,
+    // paddingTop: 6,
   },
   item: {
     width: (SCREEN_WIDTH - 18) / 2,

@@ -86,6 +86,7 @@ export default () => {
           component={Home}
           options={{
             title: '首页',
+            headerShown: false,
           }}
         />
         <BottomTab.Screen
@@ -93,6 +94,7 @@ export default () => {
           component={Message}
           options={{
             title: '消息',
+            headerShown: false,
           }}
         />
         <BottomTab.Screen
@@ -100,6 +102,7 @@ export default () => {
           component={Shop}
           options={{
             title: '发布',
+            headerShown: false,
           }}
         />
         <BottomTab.Screen
@@ -107,6 +110,7 @@ export default () => {
           component={Shop}
           options={{
             title: '购物',
+            headerShown: false,
           }}
         />
         <BottomTab.Screen
@@ -114,6 +118,7 @@ export default () => {
           component={Mine}
           options={{
             title: '我的',
+            headerShown: false,
           }}
         />
       </BottomTab.Navigator>
