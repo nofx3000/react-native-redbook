@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useCallback} from 'react';
 import {
   View,
   Text,
@@ -15,11 +15,16 @@ import ResizeImage from '../../components/ResizeImage/ResizeImage';
 import Heart from '../../components/Heart/Heart';
 import TitleBar from './components/TitleBar';
 import CategoryList from './components/CategoryList';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default observer(() => {
   const store = useLocalStore(() => new HomeStore());
+
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
   useEffect(() => {
     store.requestHomeList();
     store.getCategoryList();
@@ -34,12 +39,16 @@ export default observer(() => {
     store.requestHomeList();
   };
 
+  const onArticlePress = useCallback((article: ArticleSimple) => {
+    navigation.push('ArticleDetail', {id: article.id});
+  }, []);
+
   const renderItem = ({item, index}: {item: ArticleSimple; index: number}) => {
     return (
       <TouchableOpacity
         style={styles.item}
         onPress={() => {
-          console.log('pressed');
+          onArticlePress(item);
         }}>
         <ResizeImage
           source={{uri: item.image}}

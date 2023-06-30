@@ -4,6 +4,7 @@ import {View, Image, StyleSheet} from 'react-native';
 import icon_logo_main from '../../assets/icon_main_logo.png';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import UserStore from '../../stores/UserStore';
 import {load} from '../../utils/Storage';
 
 export default () => {
@@ -18,10 +19,16 @@ export default () => {
 
   const getUserInfo = async () => {
     const cacheUserInfo = await load('userInfo');
-    if (cacheUserInfo && JSON.parse(cacheUserInfo)) {
-      startHome();
-    } else {
+    if (!cacheUserInfo) {
       startLogin();
+    } else {
+      const parse = JSON.parse(cacheUserInfo);
+      if (parse) {
+        UserStore.setUserInfo(parse);
+        startHome();
+      } else {
+        startLogin();
+      }
     }
   };
 
