@@ -20,7 +20,7 @@ const articles: Article[] = [
         ],
         favoriteCount: 325,
         collectionCount: 166,
-        isFavorite: true,
+        isFavorite: false,
         isCollection: false,
         comments: [
             {
@@ -107,7 +107,7 @@ const articles: Article[] = [
         favoriteCount: 1098,
         collectionCount: 208,
         isFavorite: false,
-        isCollection: true,
+        isCollection: false,
         comments: [
             {
                 userName: '胖胖胖',
@@ -316,7 +316,7 @@ const articles: Article[] = [
         ],
         favoriteCount: 8700,
         collectionCount: 288,
-        isFavorite: false,
+        isFavorite: true,
         isCollection: false,
         comments: [
             {
@@ -911,7 +911,7 @@ const articles: Article[] = [
         ],
         favoriteCount: 105,
         collectionCount: 28,
-        isFavorite: false,
+        isFavorite: true,
         isCollection: false,
         comments: [
             {
@@ -986,7 +986,7 @@ const articles: Article[] = [
         ],
         favoriteCount: 2010,
         collectionCount: 198,
-        isFavorite: false,
+        isFavorite: true,
         isCollection: false,
         comments: [
             {
@@ -1072,7 +1072,7 @@ const articles: Article[] = [
         ],
         favoriteCount: 2010,
         collectionCount: 198,
-        isFavorite: false,
+        isFavorite: true,
         isCollection: false,
         comments: [
             {

@@ -2,7 +2,7 @@ import { Inject, HTTPController, HTTPMethod, HTTPMethodEnum } from '@eggjs/tegg'
 import { FavorateService } from '@/module/foo';
 
 @HTTPController({
-  path: '/favorate',
+  path: '/mine',
 })
 export class FavorateController {
   @Inject()
@@ -10,9 +10,33 @@ export class FavorateController {
 
   @HTTPMethod({
     method: HTTPMethodEnum.GET,
-    path: 'favorateArticleList',
+    path: 'noteList',
   })
-  async favorateArticleList() {
-    return await this.favorateService.getFavorateArticleList();
+  async noteList() {
+    return [];
+  }
+
+  @HTTPMethod({
+    method: HTTPMethodEnum.GET,
+    path: 'collectionList',
+  })
+  async collectionList() {
+    return [];
+  }
+
+  @HTTPMethod({
+    method: HTTPMethodEnum.GET,
+    path: 'favorateList',
+  })
+  async favorateList() {
+    return await this.favorateService.getFavorateList();
+  }
+
+  @HTTPMethod({
+    method: HTTPMethodEnum.GET,
+    path: 'accountInfo',
+  })
+  async accountInfo() {
+    return await this.favorateService.getAccountInfo();
   }
 }

@@ -17,7 +17,7 @@ export class MessageService {
 
   // 商品列表
   async getMessageList(page: number, size: number): Promise<MessageListItem[]> {
-    await sleep(2000);
+    await sleep(1000);
     if (size !== 10) {
         size = 10;
     }
@@ -44,7 +44,7 @@ export class MessageService {
 
   // 未读数量
   async getUnRead(): Promise<{unreadFavorate: number, newFollow: number, comment: number}> {
-    await sleep(1000);
+    await sleep(500);
     return {unreadFavorate: 118, newFollow: 12, comment: 64};
   }
 }

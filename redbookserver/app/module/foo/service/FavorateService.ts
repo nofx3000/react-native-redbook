@@ -15,10 +15,10 @@ export class FavorateService {
   @Inject()
   host: string;
 
-  // 首页文章列表
-  async getFavorateArticleList(): Promise<ArticleSimple[]> {
-    await sleep(2000);
-    const sub = [articles[0], articles[3], articles[9], articles[11]]
+  // 点赞列表
+  async getFavorateList(): Promise<ArticleSimple[]> {
+    await sleep(1000);
+    const sub = [articles[3], articles[10], articles[11], articles[12]]
     return sub.map(item => {
         return {
             id: item.id,
@@ -30,5 +30,15 @@ export class FavorateService {
             image: `http://${this.host}/public${item.images[0]}`,
         };
     })
+  }
+
+  // 点赞列表
+  async getAccountInfo(): Promise<any> {
+    await sleep(500);
+    return {
+        followCount: 28,
+        fans: 648,
+        favorateCount: 1988,
+    };
   }
 }
