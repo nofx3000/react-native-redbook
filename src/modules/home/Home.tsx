@@ -6,6 +6,7 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {useLocalStore} from 'mobx-react';
 import HomeStore from './HomeStore';
@@ -17,6 +18,17 @@ import TitleBar from './components/TitleBar';
 import CategoryList from './components/CategoryList';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import _updateConfig from '../../../update.json';
+import {
+  checkUpdate,
+  downloadUpdate,
+  switchVersionLater,
+  isFirstTime,
+  markSuccess,
+  isRolledBack,
+} from 'react-native-update';
+
+const {appKey} = _updateConfig[Platform.OS];
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -28,7 +40,36 @@ export default observer(() => {
   useEffect(() => {
     store.requestHomeList();
     store.getCategoryList();
+
+    checkPatch();
+    if (isFirstTime) {
+      markSuccess();
+      console.log('更新成功了');
+    } else if (isRolledBack) {
+      console.log('更新失败，已回滚');
+    }
   }, []);
+
+  const checkPatch = async () => {
+    const info: any = await checkUpdate(appKey);
+    const {update} = info;
+    if (update) {
+      const hash = await downloadUpdate(
+        info,
+        // 下载回调为可选参数，从v5.8.3版本开始加入
+        {
+          onDownloadProgress: ({received, total}) => {
+            // 已下载的字节数, 总字节数
+            console.log(received, total);
+          },
+        },
+      );
+      if (!hash) {
+        return;
+      }
+      switchVersionLater(hash);
+    }
+  };
 
   const refreshNewData = () => {
     store.resetPage();
